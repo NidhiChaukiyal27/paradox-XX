@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAnalytics } from "firebase/analytics";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -28,9 +29,13 @@ import {
 
 };
 
+
+
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
+const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
 
 // -------------------
