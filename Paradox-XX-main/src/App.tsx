@@ -1,4 +1,6 @@
 import './App.css';
+import { getRedirectResult } from "firebase/auth";
+import { auth } from './services/firebase';
 import { useState, useEffect, useCallback } from 'react';
 
 // Components
@@ -56,11 +58,39 @@ function App() {
   const [winner, setWinner] = useState('');
   const [user, setUser] = useState<any>(null);
 
+useEffect(() => {
+  const checkRedirect = async () => {
+    try {
+      const result = await getRedirectResult(auth);
+      console.log("Redirect result:", result);
+
+      if (result?.user) {
+        console.log("User after redirect:", result.user);
+      }
+    } catch (error) {
+      console.error("Redirect error:", error);
+    }
+  };
+
+  checkRedirect();
+}, []);
+
   useEffect(() => {
     initBackgroundMusic(mute);
     return () => stopBackgroundMusic();
   }, [mute]);
 
+  useEffect(() => {
+  getRedirectResult(auth)
+    .then((result) => {
+      if (result?.user) {
+        console.log("Logged in user:", result.user);
+      }
+    })
+    .catch((error) => {
+      console.error("Redirect error:", error);
+    });
+}, []);
   useEffect(() => {
     toggleBackgroundMusic(mute);
   }, [mute]);
